@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "Laborator 2 - Creational Patterns I";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0 mb-4">
+        <div class="card-header bg-dark text-white">
+            <h3>Laborator 2: Factory Method & Abstract Factory</h3>
+        </div>
+        <div class="card-body">
+            <!-- Factory Method Section -->
+            <section class="mb-5">
+                <h4 class="text-primary border-bottom pb-2">1. Factory Method</h4>
+                <p class="text-muted">Crearea obiectelor fără a specifica direct clasa concretă.</p>
+                <ul class="list-group">
+                    @foreach (var res in ViewBag.FactoryResults)
+                    {
+                        <li class="list-group-item list-group-item-info">@res</li>
+                    }
+                </ul>
+            </section>
+
+            <!-- Abstract Factory Section -->
+            <section>
+                <h4 class="text-primary border-bottom pb-2">2. Abstract Factory</h4>
+                <p class="text-muted">Crearea familiilor de obiecte înrudite.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-light">
+                            <h5>Mod Standard</h5>
+                            <p>Header: <strong>@ViewBag.StandardHeader</strong></p>
+                            <button class="btn" style="@ViewBag.StandardButtonStyle">Buton Standard</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded bg-dark text-white">
+                            <h5>Mod Premium</h5>
+                            <p>Header: <span style="color: gold;">@ViewBag.PremiumHeader</span></p>
+                            <button class="btn" style="@ViewBag.PremiumButtonStyle">Buton Premium</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="card-footer">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
+            <a asp-controller="Lab1" asp-action="Index" class="btn btn-outline-primary">Laborator 1</a>
+        </div>
+    </div>
+</div>

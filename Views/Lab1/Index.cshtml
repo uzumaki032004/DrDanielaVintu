@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"] = "Laborator 1 - Rezultat";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2>Laborator 1 - OOP & SOLID</h2>
+        </div>
+        <div class="card-body p-4">
+            <h4 class="text-success">@ViewBag.Message</h4>
+            <hr />
+            <h5>Concepte demonstrate:</h5>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Încapsulare:</strong> Validări în clasa <code>Client</code>.</li>
+                <li class="list-group-item"><strong>Moștenire:</strong> <code>Consultation</code> și <code>NutritionalPlan</code> derivă din <code>MedicalService</code>.</li>
+                <li class="list-group-item"><strong>Polimorfism:</strong> Metoda <code>CalculateFinalPrice()</code> este suprascrisă diferit.</li>
+                <li class="list-group-item"><strong>SOLID - SRP:</strong> <code>AppointmentManager</code> are o singură responsabilitate.</li>
+                <li class="list-group-item"><strong>SOLID - DIP:</strong> Injecția <code>INotificationService</code> prin constructor.</li>
+                <li class="list-group-item"><strong>SOLID - OCP/LSP:</strong> Adăugarea de noi servicii fără a modifica managerul.</li>
+            </ul>
+            <div class="mt-4 alert alert-info">
+                <strong>Notă:</strong> Rezultatele procesării (simularea trimiterii de email-uri) sunt vizibile în <strong>Consola de Output</strong> a serverului.
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Înapoi la Home</a>
+        </div>
+    </div>
+</div>

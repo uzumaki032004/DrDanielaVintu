@@ -1,0 +1,56 @@
+@{
+    ViewData["Title"] = "Laborator 3 - Creational Patterns II";
+}
+
+<div class="container mt-5">
+    <div class="card shadow border-0 mb-4">
+        <div class="card-header bg-info text-white">
+            <h3>Laborator 3: Builder, Prototype & Singleton</h3>
+        </div>
+        <div class="card-body">
+            <!-- Builder Section -->
+            <section class="mb-5">
+                <h4 class="text-info border-bottom pb-2">1. Builder</h4>
+                <p class="text-muted">Construcția pas cu pas a unui obiect complex (Plan Alimentar).</p>
+                <div class="alert alert-light border">
+                    <strong>Rezultat Builder:</strong> @ViewBag.MealPlan
+                </div>
+            </section>
+
+            <!-- Prototype Section -->
+            <section class="mb-5">
+                <h4 class="text-info border-bottom pb-2">2. Prototype</h4>
+                <p class="text-muted">Clonarea obiectelor existente (Patient Records).</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="p-2 border bg-light small">
+                            <strong>Original:</strong> @ViewBag.OriginalRecord
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-2 border bg-white small">
+                            <strong>Clonă (Modificată):</strong> @ViewBag.ClonedRecord
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Singleton Section -->
+            <section>
+                <h4 class="text-info border-bottom pb-2">3. Singleton</h4>
+                <p class="text-muted">Asigurarea unei singure instanțe globale (Clinic Settings).</p>
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <p>Nume Clinică: <strong>@ViewBag.ClinicName</strong></p>
+                        <p>Instanță inițializată la: <span class="badge bg-secondary">@ViewBag.InitializedAt</span></p>
+                        <small class="text-muted">* Dacă dai refresh, timpul de inițializare rămâne identic, demonstrând că instanța este unică și persistentă în ciclul de viață al aplicației.</small>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="card-footer">
+            <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Home</a>
+            <a asp-controller="Lab2" asp-action="Index" class="btn btn-outline-dark">Laborator 2</a>
+        </div>
+    </div>
+</div>
