@@ -37,6 +37,9 @@ using (var scope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var context = services.GetRequiredService<ApplicationDbContext>();
 
+    // Apply pending migrations automatically
+    await context.Database.MigrateAsync();
+
     // Roles seeding
     string[] roleNames = { "Admin", "User", "Premium" };
     foreach (var roleName in roleNames)
