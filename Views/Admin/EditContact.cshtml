@@ -1,0 +1,55 @@
+@model List<DrDanielaVintu.Models.SiteSettings>
+@{
+    ViewData["Title"] = "Editează Contact";
+    Layout = "_AdminLayout";
+    
+    var phone = Model.FirstOrDefault(s => s.Key == "Contact_Phone")?.Value ?? "";
+    var email = Model.FirstOrDefault(s => s.Key == "Contact_Email")?.Value ?? "";
+    var address = Model.FirstOrDefault(s => s.Key == "Contact_Address")?.Value ?? "";
+    var fb = Model.FirstOrDefault(s => s.Key == "Contact_Facebook")?.Value ?? "";
+    var ig = Model.FirstOrDefault(s => s.Key == "Contact_Instagram")?.Value ?? "";
+}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+    <li class="breadcrumb-item active">Editează Contact</li>
+  </ol>
+</nav>
+
+<div class="card p-4 shadow-sm border-0">
+    <h2 class="mb-4">📞 Informații de Contact & Social Media</h2>
+    <form asp-action="EditContact" method="post">
+        <div class="row">
+            <div class="col-md-6">
+                <h5 class="mb-3 text-primary">Date Directe</h5>
+                <div class="mb-3">
+                    <label class="form-label">Telefon</label>
+                    <input type="text" name="settings[Contact_Phone]" value="@phone" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="settings[Contact_Email]" value="@email" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Adresă Sediu</label>
+                    <textarea name="settings[Contact_Address]" class="form-control" rows="3">@address</textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5 class="mb-3 text-primary">Rețele Sociale</h5>
+                <div class="mb-3">
+                    <label class="form-label">Link Facebook</label>
+                    <input type="url" name="settings[Contact_Facebook]" value="@fb" class="form-control" placeholder="https://facebook.com/...">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Link Instagram</label>
+                    <input type="url" name="settings[Contact_Instagram]" value="@ig" class="form-control" placeholder="https://instagram.com/...">
+                </div>
+            </div>
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary px-5">Salvează Contact</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Anulează</a>
+    </form>
+</div>

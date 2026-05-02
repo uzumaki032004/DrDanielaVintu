@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body { padding-bottom: 0; background-color: #f8f9fa; }
+        .sidebar { min-height: 100vh; background: var(--royal-green); color: white; padding-top: 20px; }
+        .sidebar a { color: rgba(255,255,255,0.8); text-decoration: none; padding: 10px 20px; display: block; }
+        .sidebar a:hover { background: rgba(255,255,255,0.1); color: white; }
+        .sidebar .active { background: rgba(255,255,255,0.2); color: white; border-left: 4px solid var(--accent-green); }
+        .admin-content { padding: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-2 sidebar d-none d-md-block">
+                <h4 class="text-center mb-4">🛠️ Admin</h4>
+                <hr />
+                <a asp-action="Index" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
+                <a asp-action="EditHome" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditHome" ? "active" : "")"><i class="fas fa-home me-2"></i> Acasă</a>
+                <a asp-action="EditAbout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditAbout" ? "active" : "")"><i class="fas fa-user-md me-2"></i> Despre</a>
+                <a asp-action="EditServices" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditServices" ? "active" : "")"><i class="fas fa-briefcase-medical me-2"></i> Servicii</a>
+                <a asp-action="EditSubscriptions" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditSubscriptions" ? "active" : "")"><i class="fas fa-gem me-2"></i> Abonamente</a>
+                <a asp-action="EditNews" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditNews" ? "active" : "")"><i class="fas fa-bell me-2"></i> Noutăți</a>
+                <a asp-action="EditArticles" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditArticles" ? "active" : "")"><i class="fas fa-book-open me-2"></i> Articole</a>
+                <a asp-action="EditContact" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditContact" ? "active" : "")"><i class="fas fa-envelope me-2"></i> Contact</a>
+                <hr />
+                <a asp-controller="Home" asp-action="Index"><i class="fas fa-external-link-alt me-2"></i> Vezi Site</a>
+            </div>
+            <div class="col-md-10 admin-content">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

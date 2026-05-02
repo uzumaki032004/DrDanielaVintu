@@ -1,0 +1,3 @@
+@model List<DrDanielaVintu.Models.Service>
+@{ ViewData["Title"] = "Servicii"; }
+<div class="container py-5"><h1 class="text-center mb-5" style="color: var(--royal-green);">Serviciile Noastre</h1><div class="row g-4">@foreach(var s in Model){<div class="col-md-4"><div class="card h-100 p-4 border-0 shadow-sm"><div class="mb-3"><i class='@s.IconName fa-3x text-primary'></i></div><h3>@s.Name</h3><p class="text-muted">@s.Description</p><h4 class="mt-auto text-success">@s.Price RON</h4></div></div>}</div></div>

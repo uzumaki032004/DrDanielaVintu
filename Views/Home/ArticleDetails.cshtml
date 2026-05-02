@@ -1,0 +1,53 @@
+@model DrDanielaVintu.Models.Article
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Articles" class="text-success text-decoration-none">Articole</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--royal-green);">@Model.Title</h1>
+            
+            <div class="d-flex align-items-center gap-3 mb-4 pb-4 border-bottom">
+                <div class="bg-light rounded-circle p-2">
+                    <i class="fas fa-user-edit text-success"></i>
+                </div>
+                <div>
+                    <div class="fw-bold">@Model.Author</div>
+                    <div class="small text-muted">@Model.CreatedAt.ToString("dd MMMM yyyy")</div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-5">
+                    <img src="@Model.ImageUrl" class="img-fluid rounded-4 shadow" alt="@Model.Title" style="width: 100%; height: auto;">
+                </div>
+            }
+
+            <div class="article-body lead text-secondary" style="white-space: pre-line; line-height: 1.8;">
+                @Model.Content
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Tags))
+            {
+                <div class="mt-5 pt-4 border-top">
+                    <h6 class="text-uppercase fw-bold text-muted mb-3">Tag-uri:</h6>
+                    <div class="d-flex flex-wrap gap-2">
+                        @foreach (var tag in Model.Tags.Split(','))
+                        {
+                            <span class="badge bg-light text-success rounded-pill px-3 py-2">#@tag.Trim()</span>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

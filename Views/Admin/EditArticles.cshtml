@@ -1,0 +1,135 @@
+@model List<DrDanielaVintu.Models.Article>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestiune Articole";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success"><i class="fas fa-newspaper me-2"></i>Articole și Blog</h2>
+    <button class="btn btn-success rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addArticleModal">
+        <i class="fas fa-plus me-2"></i>Adaugă Articol Nou
+    </button>
+</div>
+
+<div class="table-responsive bg-white p-4 rounded-4 shadow-sm">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Imagine</th>
+                <th>Titlu</th>
+                <th>Autor</th>
+                <th>Dată</th>
+                <th class="text-end">Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var article in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(article.ImageUrl))
+                        {
+                            <img src="@article.ImageUrl" class="rounded" style="width: 60px; height: 60px; object-fit: cover;">
+                        }
+                    </td>
+                    <td class="fw-bold">@article.Title</td>
+                    <td>@article.Author</td>
+                    <td>@article.CreatedAt.ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">
+                        <button class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal-@article.Id">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <a asp-action="DeleteArticle" asp-route-id="@article.Id" class="btn btn-outline-danger btn-sm rounded-pill" onclick="return confirm('Ștergi acest articol?')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+
+                <!-- Edit Modal -->
+                <div class="modal fade" id="editModal-@article.Id" tabindex="-1">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content border-0 shadow">
+                            <form asp-action="UpdateArticle" method="post" enctype="multipart/form-data">
+                                <div class="modal-header bg-success text-white border-0">
+                                    <h5 class="modal-title">Editează Articol</h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <input type="hidden" name="Id" value="@article.Id" />
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Titlu</label>
+                                        <input type="text" name="Title" value="@article.Title" class="form-control" required />
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Conținut</label>
+                                        <textarea name="Content" class="form-control" rows="10" required>@article.Content</textarea>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Autor</label>
+                                            <input type="text" name="Author" value="@article.Author" class="form-control" required />
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label fw-bold">Tags (separate prin virgula)</label>
+                                            <input type="text" name="Tags" value="@article.Tags" class="form-control" />
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Imagine (lasă gol dacă nu vrei să o schimbi)</label>
+                                        <input type="file" name="photo" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="modal-footer border-0">
+                                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Anulează</button>
+                                    <button type="submit" class="btn btn-success rounded-pill px-4">Salvează Modificările</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Modal -->
+<div class="modal fade" id="addArticleModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content border-0 shadow">
+            <form asp-action="AddArticle" method="post" enctype="multipart/form-data">
+                <div class="modal-header bg-success text-white border-0">
+                    <h5 class="modal-title">Adaugă Articol Nou</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Titlu</label>
+                        <input type="text" name="Title" class="form-control" placeholder="Titlul articolului" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Conținut</label>
+                        <textarea name="Content" class="form-control" rows="10" placeholder="Scrie conținutul articolului aici..." required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Autor</label>
+                            <input type="text" name="Author" value="Dr. Daniela Vîntu" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold">Tags</label>
+                            <input type="text" name="Tags" class="form-control" placeholder="nutritie, sanatate, etc" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Imagine Articol</label>
+                        <input type="file" name="photo" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-light rounded-pill" data-bs-dismiss="modal">Anulează</button>
+                    <button type="submit" class="btn btn-success rounded-pill px-4">Publică Articol</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,37 @@
+@model List<DrDanielaVintu.Models.SiteSettings>
+@{
+    ViewData["Title"] = "Editează Acasă";
+    Layout = "_AdminLayout";
+    
+    var heroTitle = Model.FirstOrDefault(s => s.Key == "Home_HeroTitle")?.Value ?? "";
+    var heroSubtitle = Model.FirstOrDefault(s => s.Key == "Home_HeroSubtitle")?.Value ?? "";
+    var ctaText = Model.FirstOrDefault(s => s.Key == "Home_CtaText")?.Value ?? "";
+}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+    <li class="breadcrumb-item active">Editează Acasă</li>
+  </ol>
+</nav>
+
+<div class="card p-4 shadow-sm border-0">
+    <h2 class="mb-4">Editează Pagina Acasă</h2>
+    <form asp-action="EditHome" method="post">
+        <div class="mb-3">
+            <label class="form-label">Titlu Hero</label>
+            <input type="text" name="settings[Home_HeroTitle]" value="@heroTitle" class="form-control" placeholder="Ex: Nutriție pentru o viață echilibrată">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Subtitlu Hero</label>
+            <textarea name="settings[Home_HeroSubtitle]" class="form-control" rows="3">@heroSubtitle</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Text Buton CTA</label>
+            <input type="text" name="settings[Home_CtaText]" value="@ctaText" class="form-control" placeholder="Ex: Vezi Serviciile">
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-primary px-5">Salvează Modificările</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Anulează</a>
+    </form>
+</div>

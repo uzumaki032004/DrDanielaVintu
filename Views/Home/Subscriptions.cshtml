@@ -1,0 +1,70 @@
+@model List<DrDanielaVintu.Models.SubscriptionPlan>
+@{
+    ViewData["Title"] = "Programe și Consultații";
+}
+
+<div class="container py-5 mt-4">
+    <div class="text-center mb-5">
+        <h6 class="text-success text-uppercase fw-bold ls-1 mb-2">Investiție în Sănătate</h6>
+        <h1 class="display-4 fw-bold mb-3" style="color: var(--royal-green);">Programe și Consultații</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 600px;">
+            Alege formatul potrivit pentru nevoile tale și pornește astăzi pe drumul către o viață echilibrată.
+        </p>
+    </div>
+
+    <div class="row g-4 justify-content-center align-items-stretch">
+        @foreach (var plan in Model)
+        {
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 border-0 shadow-lg pricing-card @(plan.IsPopular ? "popular-card" : "")" style="border-radius: 30px; overflow: hidden; transition: transform 0.3s ease;">
+                    @if (plan.IsPopular)
+                    {
+                        <div class="bg-warning text-dark text-center py-2 fw-bold text-uppercase small">Most Popular</div>
+                    }
+                    <div class="card-body p-5 d-flex flex-column text-center">
+                        <h3 class="fw-bold mb-4">@plan.Name</h3>
+                        
+                        <div class="price-box mb-4">
+                            <span class="currency fs-3 align-top">EUR</span>
+                            <span class="amount display-3 fw-bold text-success">@plan.Price.ToString("F0")</span>
+                        </div>
+
+                        <ul class="list-unstyled mb-5 text-start flex-grow-1">
+                            @{
+                                var benefits = plan.Benefits.Split(new[] { ';', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                                foreach (var benefit in benefits)
+                                {
+                                    <li class="mb-3 d-flex align-items-start">
+                                        <i class="fas fa-check-circle text-success mt-1 me-3"></i>
+                                        <span>@benefit.Trim()</span>
+                                    </li>
+                                }
+                            }
+                        </ul>
+
+                        <button class="btn @(plan.IsPopular ? "btn-success" : "btn-outline-success") btn-lg w-100 rounded-pill py-3 fw-bold mt-auto shadow-sm">
+                            Rezervă
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .ls-1 { letter-spacing: 2px; }
+    .pricing-card:hover {
+        transform: translateY(-15px);
+    }
+    .popular-card {
+        border: 2px solid var(--accent-green) !important;
+        background-color: #fff;
+    }
+    .price-box {
+        color: var(--royal-green);
+    }
+    .pricing-card .card-body {
+        background: linear-gradient(180deg, #ffffff 0%, #fdfdfd 100%);
+    }
+</style>

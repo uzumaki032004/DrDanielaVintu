@@ -1,0 +1,37 @@
+@model List<DrDanielaVintu.Models.SubscriptionPlan>
+@{
+    ViewData["Title"] = "Editează Abonamente";
+    Layout = "_AdminLayout";
+}
+
+<h2 class="mb-4">💎 Editează Abonamente și Beneficii</h2>
+
+<div class="row g-4">
+    @foreach (var plan in Model)
+    {
+        <div class="col-md-4">
+            <div class="card p-4 shadow-sm border-0 @(plan.IsPopular ? "border-primary border-top" : "")">
+                <form asp-action="EditSubscription" method="post">
+                    <input type="hidden" name="Id" value="@plan.Id" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nume Plan</label>
+                        <input type="text" name="Name" value="@plan.Name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Preț (RON/Lună)</label>
+                        <input type="number" name="Price" value="@plan.Price" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Beneficii (Separate prin punct și virgulă ';')</label>
+                        <textarea name="Benefits" class="form-control" rows="6">@plan.Benefits</textarea>
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" name="IsPopular" value="true" class="form-check-input" @(plan.IsPopular ? "checked" : "")>
+                        <label class="form-check-label">Plan Popular</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Salvează @plan.Name</button>
+                </form>
+            </div>
+        </div>
+    }
+</div>

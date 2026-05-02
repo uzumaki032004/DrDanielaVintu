@@ -1,0 +1,58 @@
+@model List<DrDanielaVintu.Models.SiteSettings>
+@{
+    ViewData["Title"] = "Editează Despre";
+    Layout = "_AdminLayout";
+    
+    var name = Model.FirstOrDefault(s => s.Key == "About_Name")?.Value ?? "";
+    var title = Model.FirstOrDefault(s => s.Key == "About_Title")?.Value ?? "";
+    var bio = Model.FirstOrDefault(s => s.Key == "About_Bio")?.Value ?? "";
+    var photoUrl = Model.FirstOrDefault(s => s.Key == "About_PhotoUrl")?.Value ?? "";
+}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+    <li class="breadcrumb-item active">Editează Despre</li>
+  </ol>
+</nav>
+
+<div class="card p-4 shadow-sm border-0">
+    <h2 class="mb-4">Editează Pagina Despre Mine</h2>
+    <form asp-action="EditAbout" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="mb-3">
+                    <label class="form-label">Nume Complet</label>
+                    <input type="text" name="settings[About_Name]" value="@name" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Titlu Profesional</label>
+                    <input type="text" name="settings[About_Title]" value="@title" class="form-control" placeholder="Ex: Nutriționist-Dietetician Autorizat">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bio / Descriere Detaliată</label>
+                    <textarea name="settings[About_Bio]" class="form-control" rows="15" placeholder="Scrie aici biografia ta completă...">@bio</textarea>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="mb-3">
+                    <label class="form-label">Fotografie Actuală</label>
+                    @if (!string.IsNullOrEmpty(photoUrl))
+                    {
+                        <img src="@photoUrl" class="img-fluid rounded shadow-sm d-block mb-2" style="max-height: 300px;">
+                    }
+                    else
+                    {
+                        <div class="bg-light text-center py-5 rounded border">Fără poză</div>
+                    }
+                    <label class="form-label mt-2">Încarcă Poză Nouă</label>
+                    <input type="file" name="photo" class="form-control" accept="image/*">
+                </div>
+            </div>
+        </div>
+        <hr />
+        <button type="submit" class="btn btn-success px-5">Salvează Pagina Despre</button>
+        <a asp-action="Index" class="btn btn-outline-secondary">Anulează</a>
+    </form>
+</div>
