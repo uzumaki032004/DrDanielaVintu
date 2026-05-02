@@ -192,15 +192,18 @@ namespace DrDanielaVintu.Controllers
                     article.ImageUrl = result.SecureUrl.AbsoluteUri;
                 }
                 
-                article.CreatedAt = DateTime.Now;
+                article.CreatedAt = DateTime.UtcNow;
+                article.Category ??= "General";
+                
                 _context.Articles.Add(article);
                 await _context.SaveChangesAsync();
+                TempData["Success"] = "Articolul a fost publicat cu succes!";
                 return RedirectToAction(nameof(EditArticles));
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Eroare la salvare: " + ex.Message);
-                var articles = await _context.Articles.ToListAsync();
+                ModelState.AddModelError("", ex.Message);
+                var articles = await _context.Articles.OrderByDescending(a => a.Id).ToListAsync();
                 return View("EditArticles", articles);
             }
         }

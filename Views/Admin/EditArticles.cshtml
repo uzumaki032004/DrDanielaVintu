@@ -11,6 +11,21 @@
     </button>
 </div>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger rounded-4 border-0 shadow-sm mb-4">
+        <h5 class="fw-bold text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Eroare la salvare:</h5>
+        <div asp-validation-summary="All" class="small text-danger"></div>
+    </div>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success rounded-4 border-0 shadow-sm mb-4">
+        <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+    </div>
+}
+
 <div class="table-responsive bg-white p-4 rounded-4 shadow-sm">
     <table class="table table-hover align-middle">
         <thead class="table-light">
