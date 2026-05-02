@@ -13,39 +13,30 @@
     </div>
 
     <div class="row g-4 justify-content-center align-items-stretch">
+    <div class="row g-4 mt-4 program-row justify-content-center">
         @foreach (var plan in Model)
         {
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-lg pricing-card @(plan.IsPopular ? "popular-card" : "")" style="border-radius: 30px; overflow: hidden; transition: transform 0.3s ease;">
+            <div class="col-lg-4 col-md-6 program-col">
+                <div class="card h-100 p-5 text-center border-0 shadow-lg @(plan.IsPopular ? "popular-card" : "")" style="border-radius: 40px;">
                     @if (plan.IsPopular)
                     {
-                        <div class="bg-warning text-dark text-center py-2 fw-bold text-uppercase small">Most Popular</div>
+                        <span class="badge bg-success rounded-pill px-3 py-2 text-uppercase mb-4 align-self-center small ls-1">Cel mai ales</span>
                     }
-                    <div class="card-body p-5 d-flex flex-column text-center">
-                        <h3 class="fw-bold mb-4">@plan.Name</h3>
-                        
-                        <div class="price-box mb-4">
-                            <span class="currency fs-3 align-top">EUR</span>
-                            <span class="amount display-3 fw-bold text-success">@plan.Price.ToString("F0")</span>
-                        </div>
-
-                        <ul class="list-unstyled mb-5 text-start flex-grow-1">
-                            @{
-                                var benefits = plan.Benefits.Split(new[] { ';', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                                foreach (var benefit in benefits)
-                                {
-                                    <li class="mb-3 d-flex align-items-start">
-                                        <i class="fas fa-check-circle text-success mt-1 me-3"></i>
-                                        <span>@benefit.Trim()</span>
-                                    </li>
-                                }
-                            }
-                        </ul>
-
-                        <button class="btn @(plan.IsPopular ? "btn-success" : "btn-outline-success") btn-lg w-100 rounded-pill py-3 fw-bold mt-auto shadow-sm">
-                            Rezervă
-                        </button>
+                    <h3 class="mb-3">@plan.Name</h3>
+                    <div class="mb-4">
+                        <span class="h1 fw-bold text-success">@plan.Price.ToString("F0")</span>
+                        <span class="text-muted">EUR</span>
                     </div>
+                    <ul class="list-unstyled mb-5 text-start opacity-75">
+                        @foreach (var b in plan.Benefits.Split(new[] { ';', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries))
+                        {
+                            <li class="mb-3 d-flex align-items-start gap-2">
+                                <i class="fas fa-check text-success mt-1 small"></i>
+                                <span>@b.Trim()</span>
+                            </li>
+                        }
+                    </ul>
+                    <button class="btn btn-success w-100 mt-auto py-3">Rezervă Acest Plan</button>
                 </div>
             </div>
         }

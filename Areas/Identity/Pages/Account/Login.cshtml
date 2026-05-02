@@ -1,0 +1,49 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Autentificare";
+}
+
+<div class="auth-container fade-in">
+    <div class="auth-card">
+        <div class="text-center mb-5">
+            <h2 class="display-6 mb-2">Bine ai revenit</h2>
+            <p class="text-muted">Introdu datele pentru a accesa contul tău</p>
+        </div>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3" role="alert"></div>
+            
+            <div class="mb-4">
+                <label asp-for="Input.Email" class="form-label small fw-bold text-uppercase ls-1">Email</label>
+                <input asp-for="Input.Email" class="form-control auth-input" autocomplete="username" aria-required="true" placeholder="nume@exemplu.com" />
+                <span asp-validation-for="Input.Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Input.Password" class="form-label small fw-bold text-uppercase ls-1">Parolă</label>
+                <input asp-for="Input.Password" class="form-control auth-input" autocomplete="current-password" aria-required="true" placeholder="parola ta" />
+                <span asp-validation-for="Input.Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4 d-flex justify-content-between align-items-center">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Input.RememberMe" />
+                    <label class="form-check-label small" asp-for="Input.RememberMe">Ține-mă minte</label>
+                </div>
+                <a id="forgot-password" asp-page="./ForgotPassword" class="text-success small text-decoration-none">Ai uitat parola?</a>
+            </div>
+
+            <button id="login-submit" type="submit" class="btn btn-success w-100 py-3 mb-4 shadow-sm">Conectare</button>
+
+            <div class="text-center">
+                <p class="text-muted small">Nu ai un cont? <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-success fw-bold text-decoration-none">Înregistrează-te</a></p>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
