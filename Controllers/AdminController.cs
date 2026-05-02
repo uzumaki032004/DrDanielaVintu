@@ -178,36 +178,64 @@ namespace DrDanielaVintu.Controllers
         [HttpPost]
         public async Task<IActionResult> AddArticle(Article article, IFormFile? photo)
         {
-            if (photo != null)
+            try
             {
-                var result = await _photoService.AddPhotoAsync(photo);
-                article.ImageUrl = result.SecureUrl.AbsoluteUri;
+                if (photo != null && photo.Length > 0)
+                {
+                    var result = await _photoService.AddPhotoAsync(photo);
+                    if (result.Error != null)
+                    {
+                        ModelState.AddModelError("", "Eroare Cloudinary: " + result.Error.Message);
+                        var articles = await _context.Articles.ToListAsync();
+                        return View("EditArticles", articles);
+                    }
+                    article.ImageUrl = result.SecureUrl.AbsoluteUri;
+                }
+                
+                article.CreatedAt = DateTime.Now;
+                _context.Articles.Add(article);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(EditArticles));
             }
-            article.CreatedAt = DateTime.Now;
-            _context.Articles.Add(article);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(EditArticles));
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Eroare la salvare: " + ex.Message);
+                var articles = await _context.Articles.ToListAsync();
+                return View("EditArticles", articles);
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateArticle(Article article, IFormFile? photo)
         {
-            var existing = await _context.Articles.FindAsync(article.Id);
-            if (existing == null) return NotFound();
-
-            existing.Title = article.Title;
-            existing.Content = article.Content;
-            existing.Author = article.Author;
-            existing.Tags = article.Tags;
-
-            if (photo != null)
+            try
             {
-                var result = await _photoService.AddPhotoAsync(photo);
-                existing.ImageUrl = result.SecureUrl.AbsoluteUri;
-            }
+                var existing = await _context.Articles.FindAsync(article.Id);
+                if (existing == null) return NotFound();
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(EditArticles));
+                existing.Title = article.Title;
+                existing.Content = article.Content;
+                existing.Author = article.Author;
+                existing.Tags = article.Tags;
+
+                if (photo != null && photo.Length > 0)
+                {
+                    var result = await _photoService.AddPhotoAsync(photo);
+                    if (result.Error == null)
+                    {
+                        existing.ImageUrl = result.SecureUrl.AbsoluteUri;
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(EditArticles));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Eroare la actualizare: " + ex.Message);
+                var articles = await _context.Articles.ToListAsync();
+                return View("EditArticles", articles);
+            }
         }
 
         public async Task<IActionResult> DeleteArticle(int id)
