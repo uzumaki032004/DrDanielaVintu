@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 using System.Linq;
 
+using Microsoft.AspNetCore.Identity;
+
 namespace DrDanielaVintu.Controllers
 {
     [Authorize(Roles = "Admin")]
@@ -14,11 +16,13 @@ namespace DrDanielaVintu.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IPhotoService _photoService;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public AdminController(ApplicationDbContext context, IPhotoService photoService)
+        public AdminController(ApplicationDbContext context, IPhotoService photoService, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _photoService = photoService;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
