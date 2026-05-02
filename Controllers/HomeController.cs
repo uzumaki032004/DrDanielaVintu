@@ -17,12 +17,16 @@ public class HomeController : Controller
         _context = context;
     }
 
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public async Task<IActionResult> Index()
     {
         // Fetch all data for the "Flow"
-        var settings = await _context.SiteSettings.ToDictionaryAsync(s => s.Key, s => s.Value);
-        var programs = await _context.SubscriptionPlans.ToListAsync();
-        var latestArticles = await _context.Articles.OrderByDescending(a => a.CreatedAt).Take(3).ToListAsync();
+        var settings = await _context.SiteSettings.AsNoTracking().ToDictionaryAsync(s => s.Key, s => s.Value);
+        var programs = await _context.SubscriptionPlans.AsNoTracking().ToListAsync();
+        var latestArticles = await _context.Articles.AsNoTracking()
+            .OrderByDescending(a => a.Id) // Sort by ID to ensure strict new-to-old order
+            .Take(3)
+            .ToListAsync();
 
         ViewBag.Programs = programs;
         ViewBag.LatestArticles = latestArticles;
@@ -48,9 +52,10 @@ public class HomeController : Controller
         return View(news);
     }
 
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public async Task<IActionResult> Articles()
     {
-        var articles = await _context.Articles.OrderByDescending(a => a.CreatedAt).ToListAsync();
+        var articles = await _context.Articles.AsNoTracking().OrderByDescending(a => a.Id).ToListAsync();
         return View(articles);
     }
 
