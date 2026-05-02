@@ -386,5 +386,21 @@ namespace DrDanielaVintu.Controllers
             }
             return RedirectToAction(nameof(EditTestimonials));
         }
+
+        // User Management
+        public async Task<IActionResult> ManageUsers()
+        {
+            var users = await _context.Users.ToListAsync();
+            var userRoles = new Dictionary<string, IList<string>>();
+            
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userRoles[user.Id] = roles;
+            }
+
+            ViewBag.UserRoles = userRoles;
+            return View(users);
+        }
     }
 }

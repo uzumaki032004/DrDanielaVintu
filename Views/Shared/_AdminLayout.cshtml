@@ -34,6 +34,7 @@
                 <a asp-action="EditTestimonials" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditTestimonials" ? "active" : "")"><i class="fas fa-quote-left me-2"></i> Testimoniale</a>
                 <a asp-action="EditContact" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditContact" ? "active" : "")"><i class="fas fa-address-book me-2"></i> Contact Info</a>
                 <hr class="opacity-25" />
+                <a asp-action="ManageUsers" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "ManageUsers" ? "active" : "")"><i class="fas fa-users-cog me-2"></i> Utilizatori</a>
                 <a asp-controller="Home" asp-action="Index"><i class="fas fa-external-link-alt me-2"></i> Vezi Site-ul</a>
             </div>
             <div class="col-md-10 admin-content">
