@@ -271,5 +271,120 @@ namespace DrDanielaVintu.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        // Messages
+        public async Task<IActionResult> GetMessages()
+        {
+            var messages = await _context.ContactMessages
+                .OrderByDescending(m => m.SentAt)
+                .ToListAsync();
+            return View(messages);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MarkAsRead(int id)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message != null)
+            {
+                message.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(GetMessages));
+        }
+
+        public async Task<IActionResult> DeleteMessage(int id)
+        {
+            var message = await _context.ContactMessages.FindAsync(id);
+            if (message != null)
+            {
+                _context.ContactMessages.Remove(message);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(GetMessages));
+        }
+
+        // Bookings
+        public async Task<IActionResult> EditBookings()
+        {
+            var bookings = await _context.Bookings
+                .Include(b => b.Plan)
+                .OrderByDescending(b => b.CreatedAt)
+                .ToListAsync();
+            return View(bookings);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmBooking(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking != null)
+            {
+                booking.Status = "Confirmed";
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(EditBookings));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelBooking(int id)
+        {
+            var booking = await _context.Bookings.FindAsync(id);
+            if (booking != null)
+            {
+                booking.Status = "Cancelled";
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(EditBookings));
+        }
+
+        // Testimonials
+        public async Task<IActionResult> EditTestimonials()
+        {
+            var testimonials = await _context.Testimonials
+                .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
+            return View(testimonials);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTestimonial(Testimonial testimonial)
+        {
+            if (string.IsNullOrEmpty(testimonial.ClientInitials) && !string.IsNullOrEmpty(testimonial.ClientName))
+            {
+                var names = testimonial.ClientName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                testimonial.ClientInitials = names.Length > 1 
+                    ? (names[0][0].ToString() + names[1][0].ToString()).ToUpper() 
+                    : names[0][0].ToString().ToUpper();
+            }
+            
+            testimonial.CreatedAt = DateTime.UtcNow;
+            _context.Testimonials.Add(testimonial);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(EditTestimonials));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ToggleTestimonialVisibility(int id)
+        {
+            var t = await _context.Testimonials.FindAsync(id);
+            if (t != null)
+            {
+                t.IsVisible = !t.IsVisible;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(EditTestimonials));
+        }
+
+        public async Task<IActionResult> DeleteTestimonial(int id)
+        {
+            var t = await _context.Testimonials.FindAsync(id);
+            if (t != null)
+            {
+                _context.Testimonials.Remove(t);
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(EditTestimonials));
+        }
     }
 }

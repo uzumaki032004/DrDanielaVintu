@@ -1,0 +1,78 @@
+@model List<DrDanielaVintu.Models.Booking>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Gestiune Rezervări";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold text-success"><i class="fas fa-calendar-alt me-2"></i>Rezervări Pacienți</h2>
+    <div class="d-flex gap-2">
+        <span class="badge bg-warning text-dark rounded-pill px-3 py-2">@Model.Count(m => m.Status == "Pending") În așteptare</span>
+        <span class="badge bg-success rounded-pill px-3 py-2">@Model.Count(m => m.Status == "Confirmed") Confirmate</span>
+    </div>
+</div>
+
+<div class="table-responsive bg-white p-4 rounded-4 shadow-sm">
+    <table class="table table-hover align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Client</th>
+                <th>Program</th>
+                <th>Data Preferată</th>
+                <th>Status</th>
+                <th class="text-end">Acțiuni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var b in Model)
+            {
+                <tr>
+                    <td>
+                        <div class="fw-bold">@b.ClientName</div>
+                        <div class="small text-muted">@b.ClientEmail | @b.ClientPhone</div>
+                    </td>
+                    <td>
+                        <span class="badge bg-light text-success border border-success px-3">@b.Plan?.Name</span>
+                    </td>
+                    <td>@b.PreferredDate.ToString("dd.MM.yyyy")</td>
+                    <td>
+                        @if (b.Status == "Pending") { <span class="badge bg-warning text-dark rounded-pill">Pending</span> }
+                        else if (b.Status == "Confirmed") { <span class="badge bg-success rounded-pill">Confirmat</span> }
+                        else { <span class="badge bg-danger rounded-pill">Anulat</span> }
+                    </td>
+                    <td class="text-end">
+                        <div class="d-flex gap-2 justify-content-end">
+                            @if (b.Status == "Pending")
+                            {
+                                <form asp-action="ConfirmBooking" asp-route-id="@b.Id" method="post">
+                                    <button type="submit" class="btn btn-sm btn-success rounded-pill"><i class="fas fa-check"></i></button>
+                                </form>
+                                <form asp-action="CancelBooking" asp-route-id="@b.Id" method="post">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill"><i class="fas fa-times"></i></button>
+                                </form>
+                            }
+                            <button class="btn btn-sm btn-outline-primary rounded-pill" data-bs-toggle="collapse" data-bs-target="#msg-@b.Id">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr class="collapse" id="msg-@b.Id">
+                    <td colspan="5" class="bg-light p-4">
+                        <div class="small fw-bold text-uppercase text-muted mb-2">Mesaj Client:</div>
+                        <p class="mb-0">@(string.IsNullOrEmpty(b.Message) ? "Fără mesaj suplimentar." : b.Message)</p>
+                        <div class="mt-3 small text-muted">Creat la: @b.CreatedAt.ToString("dd.MM.yyyy HH:mm")</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="text-center py-5">
+        <i class="fas fa-calendar-times fa-4x text-muted mb-3 opacity-25"></i>
+        <h4 class="text-muted">Nu există rezervări încă.</h4>
+    </div>
+}

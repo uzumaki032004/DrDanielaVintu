@@ -1,0 +1,27 @@
+@{
+    ViewData["Title"] = "Acces Refuzat";
+}
+
+<div class="container py-5 mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="bg-light rounded-circle p-5 d-inline-block mb-4">
+                <i class="fas fa-lock fa-5x text-danger opacity-75"></i>
+            </div>
+            <h2 class="display-5 fw-bold mb-4" style="color: var(--royal-green);">Acces Refuzat</h2>
+            <p class="lead text-secondary mb-5">
+                Nu ai permisiunile necesare pentru a accesa această pagină. 
+                Dacă ești administrator, te rugăm să te autentifici cu contul corespunzător.
+            </p>
+            
+            <div class="d-flex gap-3 justify-content-center">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-success rounded-pill px-5 py-3 shadow-lg">
+                    Înapoi la Siguranță
+                </a>
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-success rounded-pill px-5 py-3">
+                    Autentificare
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

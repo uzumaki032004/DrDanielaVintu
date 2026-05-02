@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /Admin/
+Disallow: /Identity/
+
+Sitemap: https://drdanielavintu.up.railway.app/sitemap.xml

@@ -54,9 +54,9 @@
                         <button class="btn btn-outline-primary btn-sm rounded-pill" data-bs-toggle="modal" data-bs-target="#editModal-@article.Id">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <a asp-action="DeleteArticle" asp-route-id="@article.Id" class="btn btn-outline-danger btn-sm rounded-pill" onclick="return confirm('Ștergi acest articol?')">
+                        <button class="btn btn-outline-danger btn-sm rounded-pill" onclick="confirmDelete('@Url.Action("DeleteArticle", new { id = article.Id })')">
                             <i class="fas fa-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>
 

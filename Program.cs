@@ -5,6 +5,10 @@ using DrDanielaVintu.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Railway/Cloud Port binding
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
@@ -29,12 +33,28 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => {
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
-// Cloudinary Configuration
-builder.Services.Configure<DrDanielaVintu.Helpers.CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
+// Cloudinary Configuration (Env Var support)
+var cloudinarySection = builder.Configuration.GetSection("CloudinarySettings");
+builder.Services.Configure<DrDanielaVintu.Helpers.CloudinarySettings>(options =>
+{
+    options.CloudName = Environment.GetEnvironmentVariable("CLOUDINARY_CLOUD_NAME") ?? cloudinarySection["CloudName"] ?? "";
+    options.ApiKey = Environment.GetEnvironmentVariable("CLOUDINARY_API_KEY") ?? cloudinarySection["ApiKey"] ?? "";
+    options.ApiSecret = Environment.GetEnvironmentVariable("CLOUDINARY_API_SECRET") ?? cloudinarySection["ApiSecret"] ?? "";
+});
 builder.Services.AddScoped<DrDanielaVintu.Interfaces.IPhotoService, DrDanielaVintu.Services.PhotoService>();
 
-// Email Configuration
-builder.Services.Configure<DrDanielaVintu.Services.EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+// Email Configuration (Env Var support)
+var emailSection = builder.Configuration.GetSection("EmailSettings");
+builder.Services.Configure<DrDanielaVintu.Services.EmailSettings>(options =>
+{
+    options.SmtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? emailSection["SmtpServer"] ?? "smtp.gmail.com";
+    var portStr = Environment.GetEnvironmentVariable("SMTP_PORT") ?? emailSection["SmtpPort"];
+    options.SmtpPort = int.TryParse(portStr, out int p) ? p : 587;
+    options.SmtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME") ?? emailSection["SmtpUsername"] ?? "";
+    options.SmtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? emailSection["SmtpPassword"] ?? "";
+    options.SenderEmail = options.SmtpUsername;
+    options.SenderName = emailSection["SenderName"] ?? "Dr. Daniela Vîntu";
+});
 builder.Services.AddTransient<Microsoft.AspNetCore.Identity.UI.Services.IEmailSender, DrDanielaVintu.Services.EmailSender>();
 
 var app = builder.Build();
@@ -51,13 +71,12 @@ using (var scope = app.Services.CreateScope())
     await context.Database.MigrateAsync();
 
     // Roles seeding
-    string[] roleNames = { "Admin", "User", "Premium" };
-    foreach (var roleName in roleNames)
+    string[] roles = { "Admin", "Patient" };
+    foreach (var role in roles)
     {
-        var roleExist = await roleManager.RoleExistsAsync(roleName);
-        if (!roleExist)
+        if (!await roleManager.RoleExistsAsync(role))
         {
-            await roleManager.CreateAsync(new IdentityRole(roleName));
+            await roleManager.CreateAsync(new IdentityRole(role));
         }
     }
 
@@ -108,6 +127,7 @@ if (app.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
+    app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

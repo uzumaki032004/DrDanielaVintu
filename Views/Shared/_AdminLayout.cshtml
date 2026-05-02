@@ -19,27 +19,103 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-2 sidebar d-none d-md-block">
-                <h4 class="text-center mb-4">🛠️ Admin</h4>
-                <hr />
-                <a asp-action="Index" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-tachometer-alt me-2"></i> Dashboard</a>
-                <a asp-action="EditHome" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditHome" ? "active" : "")"><i class="fas fa-home me-2"></i> Acasă</a>
-                <a asp-action="EditAbout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditAbout" ? "active" : "")"><i class="fas fa-user-md me-2"></i> Despre</a>
-                <a asp-action="EditServices" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditServices" ? "active" : "")"><i class="fas fa-briefcase-medical me-2"></i> Servicii</a>
-                <a asp-action="EditSubscriptions" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditSubscriptions" ? "active" : "")"><i class="fas fa-gem me-2"></i> Abonamente</a>
-                <a asp-action="EditNews" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditNews" ? "active" : "")"><i class="fas fa-bell me-2"></i> Noutăți</a>
-                <a asp-action="EditArticles" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditArticles" ? "active" : "")"><i class="fas fa-book-open me-2"></i> Articole</a>
-                <a asp-action="EditContact" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditContact" ? "active" : "")"><i class="fas fa-envelope me-2"></i> Contact</a>
-                <hr />
-                <a asp-controller="Home" asp-action="Index"><i class="fas fa-external-link-alt me-2"></i> Vezi Site</a>
+            <div class="col-md-2 sidebar d-none d-md-block shadow">
+                <h4 class="text-center mb-4 logo-text text-white">🛠️ Admin</h4>
+                <hr class="opacity-25" />
+                <a asp-action="Index" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"><i class="fas fa-chart-line me-2"></i> Sumar</a>
+                <a asp-action="GetMessages" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "GetMessages" ? "active" : "")"><i class="fas fa-envelope me-2"></i> Mesaje</a>
+                <a asp-action="EditBookings" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditBookings" ? "active" : "")"><i class="fas fa-calendar-check me-2"></i> Rezervări</a>
+                <hr class="opacity-25" />
+                <a asp-action="EditHome" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditHome" ? "active" : "")"><i class="fas fa-home me-2"></i> Pagina Acasă</a>
+                <a asp-action="EditAbout" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditAbout" ? "active" : "")"><i class="fas fa-user-md me-2"></i> Despre Mine</a>
+                <a asp-action="EditPrograms" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditPrograms" ? "active" : "")"><i class="fas fa-gem me-2"></i> Programe</a>
+                <a asp-action="EditArticles" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditArticles" ? "active" : "")"><i class="fas fa-feather me-2"></i> Articole</a>
+                <a asp-action="EditNews" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditNews" ? "active" : "")"><i class="fas fa-bullhorn me-2"></i> Noutăți</a>
+                <a asp-action="EditTestimonials" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditTestimonials" ? "active" : "")"><i class="fas fa-quote-left me-2"></i> Testimoniale</a>
+                <a asp-action="EditContact" class="@(ViewContext.RouteData.Values["action"]?.ToString() == "EditContact" ? "active" : "")"><i class="fas fa-address-book me-2"></i> Contact Info</a>
+                <hr class="opacity-25" />
+                <a asp-controller="Home" asp-action="Index"><i class="fas fa-external-link-alt me-2"></i> Vezi Site-ul</a>
             </div>
             <div class="col-md-10 admin-content">
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success border-0 shadow-sm rounded-4 mb-4">
+                        <i class="fas fa-check-circle me-2"></i> @TempData["Success"]
+                    </div>
+                }
                 @RenderBody()
             </div>
         </div>
     </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 11000;">
+        <div id="liveToast" class="toast border-0 rounded-4 shadow-lg" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header border-0 bg-success text-white rounded-top-4">
+                <i class="fas fa-check-circle me-2"></i>
+                <strong class="me-auto">Succes</strong>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"></button>
+            </div>
+            <div class="toast-body bg-white rounded-bottom-4">
+                @TempData["Success"]
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-4 shadow">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Confirmare Ștergere</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <p class="mb-0">Sigur dorești să ștergi acest element? Această acțiune este ireversibilă.</p>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Anulează</button>
+                    <a id="confirmDeleteBtn" href="#" class="btn btn-danger rounded-pill px-4">Șterge Definitiv</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Toast logic
+            @if (TempData["Success"] != null)
+            {
+                <text>
+                const toastEl = document.getElementById('liveToast');
+                const toast = new bootstrap.Toast(toastEl);
+                toast.show();
+                </text>
+            }
+
+            // Global Loading logic
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Se procesează...';
+                    }
+                });
+            });
+
+            // Global Delete Confirmation logic
+            window.confirmDelete = function(url) {
+                const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+                document.getElementById('confirmDeleteBtn').href = url;
+                modal.show();
+                return false;
+            };
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

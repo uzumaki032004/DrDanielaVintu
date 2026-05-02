@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Pagina nu a fost găsită";
+    var latestArticles = ViewBag.LatestArticles as List<DrDanielaVintu.Models.Article>;
+}
+
+<div class="container py-5 mt-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="display-1 fw-bold text-success mb-4">404</h1>
+            <h2 class="display-5 fw-bold mb-4" style="color: var(--royal-green);">Hopa! Pagina a dispărut.</h2>
+            <p class="lead text-secondary mb-5">
+                Se pare că link-ul pe care ai apăsat nu mai există sau a fost mutat. 
+                Nu-ți face griji, poți găsi drumul înapoi mai jos.
+            </p>
+            
+            <div class="d-flex gap-3 justify-content-center mb-5">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-success rounded-pill px-5 py-3 shadow-lg">
+                    Înapoi la Acasă
+                </a>
+                <a asp-controller="Home" asp-action="Contact" class="btn btn-outline-success rounded-pill px-5 py-3">
+                    Contactează-ne
+                </a>
+            </div>
+
+            <hr class="my-5 opacity-10">
+
+            @if (latestArticles != null && latestArticles.Any())
+            {
+                <h4 class="fw-bold mb-4">Poate te interesează aceste articole:</h4>
+                <div class="row g-4 text-start">
+                    @foreach (var article in latestArticles)
+                    {
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: 20px;">
+                                <div class="card-body p-4">
+                                    <h6 class="fw-bold mb-2">@article.Title</h6>
+                                    <a asp-action="ArticleDetails" asp-route-id="@article.Id" class="btn btn-link p-0 text-success text-decoration-none small">Citește <i class="fas fa-arrow-right ms-1"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

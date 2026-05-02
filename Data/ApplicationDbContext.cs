@@ -11,6 +11,9 @@ namespace DrDanielaVintu.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<SiteSettings> SiteSettings { get; set; }
+        public DbSet<ContactMessage> ContactMessages { get; set; }
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

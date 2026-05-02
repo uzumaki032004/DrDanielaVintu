@@ -1,0 +1,91 @@
+@{
+    ViewData["Title"] = "Calculator IMC";
+}
+
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+            <h6 class="text-success text-uppercase fw-bold ls-1 mb-2">Instrumente Gratuite</h6>
+            <h1 class="display-4 fw-bold mb-4" style="color: var(--royal-green);">Calculator IMC</h1>
+            <p class="text-secondary mb-5">
+                Indicele de Masă Corporală (IMC) este un indicator oficial care îți spune dacă greutatea ta este sănătoasă în raport cu înălțimea ta.
+            </p>
+
+            <div class="card border-0 shadow-lg p-5" style="border-radius: 40px;">
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Înălțime (cm)</label>
+                    <input type="number" id="height" class="form-control rounded-pill px-4 py-3 text-center fs-4 border-success-subtle" placeholder="Ex: 170" oninput="calculateBMI()">
+                </div>
+                <div class="mb-5">
+                    <label class="form-label fw-bold">Greutate (kg)</label>
+                    <input type="number" id="weight" class="form-control rounded-pill px-4 py-3 text-center fs-4 border-success-subtle" placeholder="Ex: 70" oninput="calculateBMI()">
+                </div>
+
+                <div id="result-container" class="p-4 rounded-4 mb-4" style="background-color: var(--beige); display: none;">
+                    <div class="small text-uppercase ls-1 text-muted mb-2">Rezultatul tău este:</div>
+                    <div id="bmi-value" class="display-3 fw-bold text-success mb-2">0.0</div>
+                    <div id="bmi-category" class="h4 fw-bold mb-3">Greutate Normală</div>
+                    <p id="bmi-advice" class="text-secondary small mb-0"></p>
+                </div>
+
+                <div id="cta-container" class="mt-2" style="display: none;">
+                    <a asp-action="Contact" class="btn btn-success rounded-pill w-100 py-3 fw-bold shadow-lg">
+                        Vreau o consultație personalizată
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-5 text-start small text-muted">
+                <p><strong>Clasificarea IMC conform OMS:</strong></p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-circle text-info me-2"></i> &lt; 18.5: Subponderal</li>
+                    <li><i class="fas fa-circle text-success me-2"></i> 18.5 - 24.9: Greutate Normală</li>
+                    <li><i class="fas fa-circle text-warning me-2"></i> 25 - 29.9: Supraponderal</li>
+                    <li><i class="fas fa-circle text-danger me-2"></i> &gt; 30: Obezitate</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateBMI() {
+            const h = document.getElementById('height').value / 100;
+            const w = document.getElementById('weight').value;
+            const resultDiv = document.getElementById('result-container');
+            const ctaDiv = document.getElementById('cta-container');
+            const bmiValueSpan = document.getElementById('bmi-value');
+            const bmiCategoryDiv = document.getElementById('bmi-category');
+            const bmiAdviceP = document.getElementById('bmi-advice');
+
+            if (h > 1 && w > 20) {
+                const bmi = (w / (h * h)).toFixed(1);
+                resultDiv.style.display = 'block';
+                ctaDiv.style.display = 'block';
+                bmiValueSpan.innerText = bmi;
+
+                if (bmi < 18.5) {
+                    bmiCategoryDiv.innerText = "Subponderal";
+                    bmiCategoryDiv.className = "h4 fw-bold mb-3 text-info";
+                    bmiAdviceP.innerText = "Greutatea ta este sub limitele recomandate. O dietă echilibrată te poate ajuta să atingi un nivel optim.";
+                } else if (bmi >= 18.5 && bmi <= 24.9) {
+                    bmiCategoryDiv.innerText = "Greutate Normală";
+                    bmiCategoryDiv.className = "h4 fw-bold mb-3 text-success";
+                    bmiAdviceP.innerText = "Felicitări! Greutatea ta este în limite sănătoase. Menține acest stil de viață echilibrat.";
+                } else if (bmi >= 25 && bmi <= 29.9) {
+                    bmiCategoryDiv.innerText = "Supraponderal";
+                    bmiCategoryDiv.className = "h4 fw-bold mb-3 text-warning";
+                    bmiAdviceP.innerText = "Ești puțin peste greutatea ideală. Putem lucra împreună la un plan de nutriție sustenabil.";
+                } else {
+                    bmiCategoryDiv.innerText = "Obezitate";
+                    bmiCategoryDiv.className = "h4 fw-bold mb-3 text-danger";
+                    bmiAdviceP.innerText = "Greutatea actuală poate prezenta riscuri pentru sănătate. Îți recomandăm o consultație de specialitate cât mai curând.";
+                }
+            } else {
+                resultDiv.style.display = 'none';
+                ctaDiv.style.display = 'none';
+            }
+        }
+    </script>
+}

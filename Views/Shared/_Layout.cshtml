@@ -9,6 +9,38 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <meta name="description" content="@ViewData["MetaDescription"]" />
+    <link rel="canonical" href="@(Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path)" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="@(Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path)" />
+    <meta property="og:title" content="@ViewData["Title"] - Dr. Daniela Vîntu" />
+    <meta property="og:description" content="@ViewData["MetaDescription"]" />
+    <meta property="og:image" content="https://res.cloudinary.com/dz8hhycli/image/upload/v1/branding/og-image.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="@(Context.Request.Scheme + "://" + Context.Request.Host + Context.Request.Path)" />
+    <meta property="twitter:title" content="@ViewData["Title"] - Dr. Daniela Vîntu" />
+    <meta property="twitter:description" content="@ViewData["MetaDescription"]" />
+    <meta property="twitter:image" content="https://res.cloudinary.com/dz8hhycli/image/upload/v1/branding/og-image.jpg" />
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@@context": "https://schema.org",
+      "@@type": "Person",
+      "name": "Dr. Daniela Vîntu",
+      "jobTitle": "Medic Nutriționist",
+      "url": "@(Context.Request.Scheme + "://" + Context.Request.Host)",
+      "sameAs": [
+        "https://www.facebook.com/dr.daniela.vintu",
+        "https://www.instagram.com/dr.daniela.vintu"
+      ],
+      "description": "Expert în nutriție și stil de viață sănătos."
+    }
+    </script>
     
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -17,15 +49,31 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand">
-            <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand d-flex align-items-center" asp-controller="Home" asp-action="Index">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
                     <span class="logo-text">dr. Daniela Vîntu</span>
                 </a>
+                
+                <div class="collapse navbar-collapse justify-content-center d-none d-lg-flex">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">Despre</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Subscriptions">Programe</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="News">Noutăți</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Articles">Articole</a></li>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item"><a class="nav-link fw-bold text-success" asp-controller="Patient" asp-action="Dashboard">Contul meu</a></li>
+                        }
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Calculator">Calculator IMC</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    </ul>
+                </div>
+
                 <div class="d-flex align-items-center gap-3">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-success btn-sm px-3 py-2"><i class="fas fa-tools me-1"></i>Admin</a>
+                        <a asp-controller="Admin" asp-action="Index" class="btn btn-outline-success btn-sm px-3 py-2 d-none d-md-inline-block"><i class="fas fa-tools me-1"></i>Admin</a>
                     }
                     <partial name="_LoginPartial" />
                 </div>
@@ -37,15 +85,44 @@
         @RenderBody()
     </main>
 
-    <footer class="footer text-muted mt-5">
-        <div class="container text-center">
-            <h5 class="logo-text mb-4">dr. Daniela Vîntu</h5>
-            <div class="mb-4 d-flex justify-content-center gap-4">
-                <a asp-action="About" class="text-decoration-none text-muted">Despre mine</a>
-                <a asp-action="Subscriptions" class="text-decoration-none text-muted">Programe</a>
-                <a asp-action="Contact" class="text-decoration-none text-muted">Contact</a>
+    <footer class="footer">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <h5 class="logo-text mb-3">dr. Daniela Vîntu</h5>
+                    <p class="text-secondary small mb-4">Construim împreună un stil de viață sănătos, bazat pe știință și echilibru.</p>
+                    <div class="d-flex gap-2">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6">
+                    <h6 class="footer-title">Navigare</h6>
+                    <a asp-action="About" class="footer-link">Despre mine</a>
+                    <a asp-action="Subscriptions" class="footer-link">Programe</a>
+                    <a asp-action="Articles" class="footer-link">Articole</a>
+                    <a asp-action="Calculator" class="footer-link">Calculator IMC</a>
+                    <a asp-action="Contact" class="footer-link">Contact</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="footer-title">Resurse</h6>
+                    <a asp-action="News" class="footer-link">Noutăți</a>
+                    <a asp-action="Privacy" class="footer-link">Confidențialitate</a>
+                    <a href="https://anpc.ro/" target="_blank" class="footer-link">ANPC</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h6 class="footer-title">Contact</h6>
+                    <p class="footer-link"><i class="fas fa-phone me-2 small"></i> +373 60 000 000</p>
+                    <p class="footer-link"><i class="fas fa-envelope me-2 small"></i> contact@drdanielavintu.com</p>
+                    <p class="footer-link"><i class="fas fa-map-marker-alt me-2 small"></i> Chisinau, Moldova</p>
+                </div>
             </div>
-            <p class="small opacity-50">&copy; 2026 - Toate drepturile rezervate. <a asp-action="Privacy" class="text-muted">Confidențialitate</a></p>
+            <hr class="my-5 opacity-5">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                <p class="small opacity-50 mb-0">&copy; 2026 - Toate drepturile rezervate.</p>
+                <p class="small opacity-50 mb-0">Site realizat cu <i class="fas fa-heart text-danger mx-1"></i></p>
+            </div>
         </div>
     </footer>
 
@@ -70,9 +147,37 @@
         </a>
     </nav>
 
+    <!-- Cookie Consent -->
+    <div id="cookie-consent" class="fixed-bottom p-4 bg-white shadow-lg border-top border-success border-4 d-none" style="z-index: 9999;">
+        <div class="container">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-4">
+                <div class="text-start">
+                    <h6 class="fw-bold mb-1"><i class="fas fa-cookie-bite me-2 text-success"></i>Control Cookie & Confidențialitate</h6>
+                    <p class="small text-muted mb-0">Folosim module cookie pentru a vă îmbunătăți experiența pe site-ul nostru. Prin continuarea navigării, sunteți de acord cu utilizarea acestora. Citiți <a asp-controller="Home" asp-action="Privacy" class="text-success">Politica de Confidențialitate</a>.</p>
+                </div>
+                <div class="d-flex gap-2 w-100 w-md-auto">
+                    <button onclick="acceptCookies('necessary')" class="btn btn-outline-secondary btn-sm rounded-pill px-4 flex-grow-1">Doar necesare</button>
+                    <button onclick="acceptCookies('all')" class="btn btn-success btn-sm rounded-pill px-4 flex-grow-1">Accept toate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            if (!localStorage.getItem("cookieConsent")) {
+                document.getElementById("cookie-consent").classList.remove("d-none");
+            }
+        });
+
+        function acceptCookies(type) {
+            localStorage.setItem("cookieConsent", type);
+            document.getElementById("cookie-consent").classList.add("d-none");
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
